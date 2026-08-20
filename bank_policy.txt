@@ -1,0 +1,180 @@
+GLOBAL MERCHANTS BANK - INSTITUTIONAL UNDERWRITING RISK POLICY
+Document ID: URP-2026-V2.1
+Policy Version: 2.1
+Effective Date: May 11, 2026
+Policy Owner: Credit Risk Management Division
+Classification: Internal Use
+
+SECTION 1: PURPOSE AND SCOPE
+
+This document establishes the mandatory underwriting risk thresholds,
+assessment criteria, and automated decision parameters applicable to
+consumer lending products issued by Global Merchants Bank.
+
+The purpose of this policy is to maintain consistent credit assessment
+standards, control exposure to default risk, and ensure that automated
+underwriting decisions are made in accordance with the Bank's approved
+credit risk framework.
+
+All automated underwriting decisions must operate within the
+parameters defined by this policy. Applications falling outside
+validated underwriting parameters must be subject to the applicable
+manual review or escalation procedures.
+
+SECTION 2: DEMOGRAPHIC CRITERIA
+
+Section 2.1: Minimum and Maximum Age Restrictions
+
+The applicant must possess the legal capacity to enter into a binding
+financial contract. Accordingly, the minimum eligible applicant age
+for any consumer credit facility is established at 18 years.
+
+Applications submitted for applicants below 18 years of age shall not
+be eligible for automated approval.
+
+For data validation and underwriting purposes, applications containing
+a stated applicant age exceeding 100 years shall be treated as
+invalid and automatically declined by the underwriting system unless
+referred for appropriate data verification or manual review.
+
+SECTION 3: FINANCIAL CAPACITY AND LEVERAGE
+
+Section 3.1: Annual Income Assessment
+
+The applicant must demonstrate sufficient and reasonably verifiable
+income to support the requested debt obligation.
+
+The stated annual income (person_income) is a primary indicator of
+repayment capacity and must be evaluated in conjunction with the
+requested principal, employment history, loan pricing, and other
+available risk characteristics.
+
+Lower-income applicants are not automatically excluded from credit.
+However, applications involving lower verified income require
+appropriate consideration of the requested principal and resulting
+leverage exposure.
+
+Section 3.2: Principal Loan Amount Limitations
+
+The principal loan amount (loan_amnt) requested by a retail consumer
+must be assessed against the applicant's demonstrated financial
+capacity.
+
+Higher principal amounts represent increased credit exposure to the
+Bank and therefore require stronger supporting characteristics across
+income, employment stability, and leverage measures.
+
+Requests at the upper limits of the Bank's approved lending range may
+be subject to enhanced underwriting scrutiny and additional
+verification requirements.
+
+Section 3.3: Income-to-Loan Ratio (Leverage Restrictions)
+
+The primary leverage metric used within the automated underwriting
+framework is Loan Percent of Income (loan_percent_income), calculated
+as the total requested loan amount divided by the applicant's verified
+gross annual income.
+
+Applications presenting a loan_percent_income value greater than
+0.35 (35%) shall be subject to heightened underwriting scrutiny due to
+the increased repayment burden relative to stated income.
+
+A loan_percent_income value equal to or greater than 0.50 (50%)
+represents an unacceptable level of leverage under this policy and
+shall result in automatic rejection, irrespective of other
+compensating applicant characteristics or existing banking
+relationships.
+
+SECTION 4: EMPLOYMENT STABILITY
+
+Section 4.1: Minimum Employment History
+
+Continuous employment history is considered an important indicator of
+income stability and repayment capacity.
+
+Applicants with a stated employment history (person_emp_length) of
+less than 2.0 years shall be classified as presenting an elevated
+employment-stability risk.
+
+Such applications require stronger compensating characteristics in
+other areas of the credit assessment before approval may be considered.
+
+Section 4.2: Maximum Validated Employment Limits
+
+Employment histories exceeding 60 years shall be treated as
+potentially invalid application data.
+
+Such values are inconsistent with normal employment-history ranges and
+may indicate data-entry errors or inaccurate applicant information.
+Applications containing such values shall be placed on hold for data
+validation or manual review rather than being processed as standard
+underwriting observations.
+
+SECTION 5: RISK-BASED PRICING
+
+Section 5.1: Interest Rate Risk Adjustments
+
+The sanctioned loan interest rate (loan_int_rate) forms part of the
+applicant's overall risk profile and may vary according to the
+composite credit risk assessment.
+
+Applicants presenting elevated risk characteristics, including limited
+employment history, lower verified income, or elevated
+income-to-loan ratios, may be assigned higher risk-based pricing in
+accordance with the Bank's approved pricing framework.
+
+Applications assigned an interest rate exceeding 18.0% shall be
+classified as a high-risk pricing tier and require secondary
+underwriter validation before final approval.
+
+SECTION 6: AUTOMATED UNDERWRITING, COMPLIANCE AND ENFORCEMENT
+
+The Bank's automated underwriting system uses approved machine
+learning models to evaluate applicant risk and produce an initial
+credit classification.
+
+The automated XGBoost underwriting model is required to operate within
+the hard eligibility and risk parameters established by this policy.
+
+Model predictions must not be interpreted as a replacement for the
+Bank's approved underwriting policy. Where a mandatory policy
+threshold requires rejection, the application must not be approved
+solely on the basis of a favorable model prediction.
+
+Any material deviation from the underwriting parameters defined in
+this policy must be documented and handled through the Bank's
+authorized review and escalation procedures.
+
+Override capabilities are restricted to authorized personnel and are
+subject to appropriate monitoring and audit controls.
+
+SECTION 7: DECISION EXPLANATION AND AUDITABILITY
+
+Where an application is rejected, the Bank must maintain an
+appropriate record of the principal factors contributing to the
+adverse credit decision and provide an explanation to the applicant
+where required by applicable law, regulation, or Bank procedure.
+
+For automated decisions, model explanation methods may be used by
+authorized underwriting and audit personnel to identify the relative
+contribution of individual applicant characteristics to the model's
+prediction.
+
+Policy-based explanations provided to applicants must be grounded in
+the applicable provisions of this Underwriting Risk Policy and must
+not attribute a decision to a policy requirement that is not stated
+within the policy.
+
+SECTION 8: POLICY GOVERNANCE
+
+This policy is owned by the Credit Risk Management Division and is
+subject to periodic review.
+
+Changes to underwriting thresholds, automated decision rules, or
+model enforcement parameters require appropriate authorization through
+the Bank's established credit risk and model governance procedures.
+
+Policy Status: Active
+Review Cycle: Annual
+
+END OF POLICY
