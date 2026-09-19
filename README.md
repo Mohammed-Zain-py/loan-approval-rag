@@ -1,52 +1,42 @@
 # Loan Approval RAG & Explainable AI
 
-A loan approval system that combines **Machine Learning, RAG, and SHAP** to make loan decisions more explainable.
+A hybrid loan approval MVP that combines traditional **Machine Learning (XGBoost)** with **Explainable AI (SHAP)** and **Agentic RAG (Gemini + ChromaDB)** to make credit decisions explainable and policy-compliant.
 
-## What this project does
+## The Architecture & Why I Built It
 
-Loan approval is a sensitive process where simply predicting whether an application should be approved or rejected is not always enough. When a loan is rejected, there should also be a clear reason behind the decision.
+Most beginner AI loan projects either rely entirely on basic ML predictions (which are black boxes and cannot cite bank policy) or rely purely on LLM prompts (which hallucinate financial math and are too slow/expensive for strict rules).
 
-This project combines three components to address this:
+I built this project to demonstrate a realistic **Human-in-the-Loop (HITL)** system that uses the right tool for the right job. It processes applications through a 4-step workflow:
 
-- **XGBoost** — predicts whether a loan should be approved or rejected.
-- **SHAP** — shows which features influenced the model's decision, mainly for bank employees and auditors.
-- **RAG** — retrieves relevant sections from the bank's underwriting policy and uses them to generate a policy-based explanation for the customer.
-
-### Decision flow
-
-1. Applicant enters their loan information.
-2. XGBoost predicts the loan status and probability of default.
-3. SHAP explains the factors that influenced the prediction.
-4. The RAG pipeline retrieves relevant sections from `bank_policy.txt`.
-5. Gemini generates a short explanation based on the retrieved policy.
+1. **Deterministic Rules Engine (Python + JSON):** The system first checks strict parameters (like a 50% Debt-to-Income cap) using a JSON config file. This ensures zero math hallucinations and saves compute by instantly rejecting policy violations.
+2. **Statistical Risk Engine (XGBoost):** If the application passes the hard rules, an XGBoost model evaluates the historical probability of default based on 32,000+ past records.
+3. **Explainable AI Audit (SHAP):** Generates a waterfall visualization to show the human underwriter exactly which features (like income, loan grade, or homeownership) influenced the ML prediction, exposing any historical data biases.
+4. **Compliance Communicator (RAG + Gemini):** Instead of letting the LLM make the decision, the deterministic outcome is passed to Gemini. Gemini searches the local ChromaDB vector store (`bank_policy.txt`) and drafts a professional, RBI-compliant explanation letter citing specific policy sections.
 
 ## Tech Stack
 
-- Python
-- Streamlit
-- XGBoost
-- SHAP
-- Pandas
-- LangChain
-- ChromaDB
-- Hugging Face Embeddings
-- Google Gemini API
-- Joblib
+- **Python & Streamlit** (Frontend Dashboard)
+- **XGBoost, Pandas, Scikit-Learn** (Machine Learning Pipeline)
+- **SHAP** (Model Explainability)
+- **LangChain & ChromaDB** (Vector Database & RAG)
+- **HuggingFace MiniLM** (Embeddings)
+- **Google Gemini 2.5 Flash API** (LLM Communication Engine)
 
 ## Project Structure
 
 ```text
 loan-approval-rag/
-├── app.py
-├── clean_data.py
-├── train_xgboost.py
-├── bank_policy.txt
-├── credit_risk_dataset.csv
-├── loan_processed.csv
-├── xgb_model.pkl
-├── requirements.txt
-├── .gitignore
-└── README.md
+├── app.py                   # Main Streamlit application and 4-layer logic
+├── policy_limits.json       # Configurable rules engine (DTI limits, age, etc.)
+├── bank_policy.txt          # Mock institutional underwriting policy document
+├── xgb_model.pkl            # Trained XGBoost classifier
+├── clean_data.py            # Data preprocessing script
+├── train_xgboost.py         # Model training and evaluation script
+├── credit_risk_dataset.csv  # Raw dataset
+├── loan_processed.csv       # Cleaned feature matrix
+├── requirements.txt         # Project dependencies
+├── .gitignore               # Git ignore rules
+└── README.md                # Documentation
 ```
 
 ## Running the Project
@@ -60,14 +50,18 @@ cd loan-approval-rag
 
 ### 2. Create and activate a virtual environment
 
+**Windows:**
+
 ```bash
 python -m venv venv
+venv\Scripts\activate
 ```
 
-Windows:
+**macOS/Linux:**
 
 ```bash
-venv\Scripts\activate
+python -m venv venv
+source venv/bin/activate
 ```
 
 ### 3. Install dependencies
@@ -82,36 +76,26 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The application will open in your browser.
+The application will open in your default web browser.
 
-## Gemini API Key
+## Security & Privacy Features
 
-The Gemini API key is **not stored in the source code**.
+### Prompt Injection Prevention
 
-The application accepts the API key through the Streamlit sidebar at runtime.
+The Streamlit UI strictly uses dropdowns, number inputs, and sliders. By eliminating free-text inputs, the system is physically protected from prompt injection attacks.
 
-## Model
+### Data Minimization in RAG
 
-The project uses an XGBoost classifier trained on the processed credit-risk dataset.
+Raw applicant figures (like exact salary and requested amounts) are evaluated locally in Python. Only the final decision status and specific policy violation are sent to the Gemini API, minimizing the exposure of financial data.
 
-The trained model is stored in:
+## Note on Gemini API Key & Model Versions
 
-```text
-xgb_model.pkl
-```
+The Gemini API key is **not stored in the source code**. You will need to enter your API key in the Streamlit sidebar at runtime to activate the RAG compliance letter generation. 
 
-## Explainability
+**Model Versioning:** The `app.py` script currently points to a specific model version (e.g., `gemini-2.5-flash`). Because Google regularly updates its models and deprecates older endpoints, you might receive a "Model discontinued" error with newer API keys. If this happens, simply open `app.py` and update the `genai.GenerativeModel("gemini-2.5-flash")` string to the latest supported version (such as `gemini-3.5-flash` or `gemini-3.8-flash`).
 
-### Employee / Auditor View
+If no API key is provided, the ML and SHAP layers will still function normally.
 
-SHAP provides a waterfall visualization showing how individual features influenced the model's prediction toward approval or rejection.
+## Disclaimer
 
-### Customer View
-
-The RAG pipeline retrieves relevant sections from `bank_policy.txt` and provides them as context to Gemini for generating the explanation.
-
-## Important Note
-
-This is an educational/portfolio project demonstrating explainable loan decisioning and policy-grounded RAG.
-
-The included bank and underwriting policy are fictional and are not intended to represent a real financial institution or production banking system.
+This is an educational portfolio project demonstrating hybrid AI architecture. The included bank policies and rules are fictional and are not intended to represent a real financial institution.

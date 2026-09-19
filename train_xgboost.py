@@ -32,14 +32,21 @@ def main():
     print(f"Data split completed: {X_train.shape[0]} training samples and {X_test.shape[0]} testing samples.")
 
     # 4. Initialize and Train the XGBoost Classifier
-    # We set standard parameters to prevent overfitting
     print("\nTraining XGBoost Classifier...")
+
+    # Calculate the ratio of approvals (0) to defaults (1)
+    majority_class = (y_train == 0).sum()
+    minority_class = (y_train == 1).sum()
+    scale_weight = majority_class / minority_class
+    print(f"Applying scale_pos_weight of {scale_weight:.2f} to penalize missed defaults.")
+
     model = xgb.XGBClassifier(
         max_depth=5, 
         learning_rate=0.1, 
         n_estimators=100, 
         random_state=42,
-        eval_metric='logloss' # To prevent a deprecation warning regarding the default evaluation metric
+        eval_metric='logloss', # To prevent a deprecation warning regarding the default evaluation metric
+        scale_pos_weight=scale_weight
     )
     
     # Fit the model to the training data

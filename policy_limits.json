@@ -1,0 +1,10 @@
+{
+  "min_age": 18,
+  "max_age": 100,
+  "max_dti": 0.50,
+  "heightened_scrutiny_dti": 0.35,
+  "min_emp_length": 2.0,
+  "max_emp_length": 60.0,
+  "high_risk_int_rate": 18.0,
+  "premium_grades": ["A", "B", "C"]
+}
